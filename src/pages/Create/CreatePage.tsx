@@ -22,7 +22,7 @@ function CreatePage() {
     }
 
     // Generar razones y slug
-    const newReasons = generateReasons(name.trim(), 50);
+    const newReasons = generateReasons(name.trim(), "50");
     const slug = generateSlug(name.trim());
 
     setReasons(newReasons);
