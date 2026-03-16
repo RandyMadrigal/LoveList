@@ -6,19 +6,18 @@ function HomePage() {
       </h1>
 
       <p className="text-gray-600">
-        Crea una página con 30 razones por la cual esa persona es tan especial
-        para ti.
+        Create a page with 50 reasons why that person is so special for you.
       </p>
 
       <p className="text-gray-600">
-        Es una forma de compartir tu amor de una manera única y personalizada.
+        It is a way to share your love in a unique and personalized way.
       </p>
 
       <a
         href="/create"
         className="inline-block bg-pink-500 text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition"
       >
-        Crear mis razones ❤️
+        Create ❤️
       </a>
     </section>
   );
