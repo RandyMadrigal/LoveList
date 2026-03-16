@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
 import { toast } from "react-hot-toast";
-
 import AnimatedCounter from "../../components/ui/AnimatedCounter";
 import { useLovePage } from "../../hooks/useLovePage";
 import ReasonsList from "../../components/love/ReasonsList";
 import Button from "../../components/ui/Button";
+import LoadingPage from "./LoadingPage"; // importamos la página de carga
 
 function LovePage() {
-  const { name, reasons } = useLovePage();
+  const { name, reasons, loading } = useLovePage();
 
   useEffect(() => {
     confetti({
@@ -66,6 +66,9 @@ function LovePage() {
     document.body.removeChild(textarea);
   };
 
+  if (loading) {
+    return <LoadingPage />;
+  }
   return (
     <>
       <header className="text-center mb-12">

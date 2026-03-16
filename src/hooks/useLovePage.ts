@@ -1,41 +1,40 @@
-import { useMemo, useEffect, useState } from "react";
+// src/hooks/useLovePage.ts
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { generateReasons } from "../utils/generateReasons";
+import { getReasonsBySlug } from "../services/firebase/loveService";
 
-export function useLovePage() {
-  const { slug } = useParams();
-
-  const [visibleCount, setVisibleCount] = useState(0);
-
-  const { name, reasons } = useMemo(() => {
-    if (!slug) return { name: "", reasons: [] };
-
-    const parts = slug.split("-");
-    const name = parts.slice(0, -1).join(" ");
-
-    const reasons = generateReasons(name, slug, 30);
-
-    return { name, reasons };
-  }, [slug]);
+export const useLovePage = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const [name, setName] = useState("");
+  const [reasons, setReasons] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true); // estado loading inicial true
 
   useEffect(() => {
-    let index = 0;
+    if (!slug) return;
 
-    const interval = setInterval(() => {
-      index++;
-
-      setVisibleCount(index);
-
-      if (index >= reasons.length) {
-        clearInterval(interval);
+    const fetchData = async () => {
+      setLoading(true); // iniciar loading
+      try {
+        const data = await getReasonsBySlug(slug);
+        if (data) {
+          setName(data.name);
+          setReasons(data.reasons);
+        } else {
+          // si no hay datos, dejamos vacíos
+          setName("");
+          setReasons([]);
+        }
+      } catch (error) {
+        console.error("Error al obtener razones:", error);
+        setName("");
+        setReasons([]);
+      } finally {
+        setLoading(false); // terminar loading
       }
-    }, 400);
+    };
 
-    return () => clearInterval(interval);
-  }, [reasons.length]);
+    fetchData();
+  }, [slug]);
 
-  return {
-    name,
-    reasons: reasons.slice(0, visibleCount),
-  };
-}
+  return { name, reasons, loading };
+};

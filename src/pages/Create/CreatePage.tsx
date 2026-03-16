@@ -6,6 +6,7 @@ import { generateSlug } from "../../utils/generateSlug";
 import { generateReasons } from "../../utils/generateReasons";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
+import { saveReasons } from "../../services/firebase/loveService";
 
 function CreatePage() {
   const [name, setName] = useState("");
@@ -14,24 +15,34 @@ function CreatePage() {
 
   const navigate = useNavigate();
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!name.trim()) {
-      toast.error("Debes escribir un nombre ❤️");
+      toast.error("Por favor ingresa un nombre 💖");
       return;
     }
 
-    const newSlug = generateSlug(name);
-    const newReasons = generateReasons(name, newSlug, 30);
+    // Generar razones y slug
+    const newReasons = generateReasons(name.trim(), 30);
+    const slug = generateSlug(name.trim());
 
-    setSlug(newSlug);
     setReasons(newReasons);
-    toast.success("Página creada ❤️");
+    setSlug(slug);
 
+    // Lanzar confeti
     confetti({
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
     });
+
+    // 🔹 Guardar en Firebase
+    try {
+      await saveReasons(slug, newReasons, name.trim());
+      toast.success("Razones guardadas correctamente ❤️");
+    } catch (error) {
+      console.error("Error guardando en Firebase:", error);
+      toast.error("No se pudieron guardar las razones 😢");
+    }
   };
 
   const handleOpenPage = () => {
