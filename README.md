@@ -138,11 +138,7 @@ Improvements, bug fixes, and UI polish are always welcome ❤️.
 
 ---
 
-## 💖 Made With Love
-
 This project was created to spread love and help express affection in a creative way.
-
-**Built by Randy Madrigal.**
 
 ---
 
