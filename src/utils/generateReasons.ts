@@ -4,7 +4,7 @@ import { seededRandom } from "./seededRandom";
 export function generateReasons(
   name: string,
   seed: string,
-  count = 30,
+  count = 50,
 ): string[] {
   const random = seededRandom(seed);
 

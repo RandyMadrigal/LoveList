@@ -22,7 +22,7 @@ function CreatePage() {
     }
 
     // Generar razones y slug
-    const newReasons = generateReasons(name.trim(), 30);
+    const newReasons = generateReasons(name.trim(), 50);
     const slug = generateSlug(name.trim());
 
     setReasons(newReasons);
@@ -53,7 +53,7 @@ function CreatePage() {
   return (
     <div className="min-h-screen p-6 bg-pink-50 flex flex-col items-center">
       <h1 className="text-4xl text-pink-600 mb-6 text-center">
-        Crear página de amor 💖
+        Create love page 💖
       </h1>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6 w-full max-w-xl">
@@ -73,7 +73,7 @@ function CreatePage() {
           <ReasonsList reasons={reasons} />
 
           <div className="flex gap-4 mt-6">
-            <Button onClick={handleOpenPage}>Ver página ❤️</Button>
+            <Button onClick={handleOpenPage}>View page ❤️</Button>
           </div>
         </>
       )}
