@@ -1,116 +1,90 @@
-import { useEffect } from "react";
-import confetti from "canvas-confetti";
-import { toast } from "react-hot-toast";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 
-import AnimatedCounter from "../../components/ui/AnimatedCounter";
-import { useLovePage } from "../../hooks/useLovePage";
-import Button from "../../components/ui/Button";
-import LoadingPage from "./LoadingPage";
+import ExperienceShell from "../../components/experience/ExperienceShell";
+import { I18nContext, type I18nValue } from "../../i18n/context";
+import { translate } from "../../i18n/translations";
+import { generateReasons } from "../../utils/generateReasons";
+import { decodePayload } from "../../utils/lovePayload";
+import InvalidLinkPage from "./InvalidLinkPage";
+import ExpiredLinkPage from "./ExpiredLinkPage";
+
+const REASON_COUNT = 50;
+
+// Only the chosen experience is downloaded
+const EXPERIENCE_COMPONENTS = {
+  story: lazy(() => import("../../components/experience/StoryExperience")),
+  envelope: lazy(() => import("../../components/experience/EnvelopeExperience")),
+  lyrics: lazy(() => import("../../components/experience/LyricsExperience")),
+  scroll: lazy(() => import("../../components/experience/ScrollExperience")),
+} as const;
 
 function LovePage() {
-  const { name, reasons, loading } = useLovePage();
+  const { token } = useParams<{ token: string }>();
 
+  const payload = useMemo(() => decodePayload(token), [token]);
+  const reasons = useMemo(
+    () =>
+      payload
+        ? generateReasons(payload.name, payload.seed, payload.lang, {
+            mode: payload.nameMode,
+            nickname: payload.nickname,
+            count: REASON_COUNT,
+          })
+        : [],
+    [payload],
+  );
+
+  // Time is read once on mount; the countdown in the shell takes over from there
+  const [mountedAt] = useState(() => Date.now());
+  const [expired, setExpired] = useState(false);
+  const handleExpire = useCallback(() => setExpired(true), []);
+
+  // The page speaks the language chosen when it was created, not the viewer's
+  const pageLang = payload?.lang;
+  const pageI18n = useMemo<I18nValue | null>(
+    () =>
+      pageLang
+        ? {
+            lang: pageLang,
+            setLang: () => {},
+            t: (key, vars) => translate(pageLang, key, vars),
+          }
+        : null,
+    [pageLang],
+  );
+
+  // The tab title also follows the page language
   useEffect(() => {
-    if (!loading) {
-      confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.6 },
-      });
-    }
-  }, [loading]);
+    if (!payload) return;
+    document.title = translate(payload.lang, "love.title", {
+      count: REASON_COUNT,
+      name: payload.name,
+    });
+  }, [payload]);
 
-  const handleShare = async () => {
-    const url = window.location.href;
+  if (!payload || !pageI18n) return <InvalidLinkPage />;
+  if (expired || payload.expiresAt <= mountedAt) return <ExpiredLinkPage />;
 
-    if ("share" in navigator) {
-      try {
-        await navigator.share({
-          title: `30 razones por las que amo a ${name}`,
-          text: `Descubre por qué ${name} es tan especial para mí ❤️`,
-          url,
-        });
-        return;
-      } catch (error) {
-        console.error("Error Web Share API:", error);
-        toast.error("No se pudo compartir con la API nativa");
-      }
-    }
-
-    if (navigator.clipboard && window.isSecureContext) {
-      try {
-        await navigator.clipboard.writeText(url);
-        toast.success("Link copiado 📎");
-        return;
-      } catch (error) {
-        console.error("Error Clipboard API:", error);
-      }
-    }
-
-    const textarea = document.createElement("textarea");
-    textarea.value = url;
-    textarea.style.position = "fixed";
-    textarea.style.left = "-9999px";
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
-
-    try {
-      const successful = document.execCommand("copy");
-      if (successful) {
-        toast.success("Link copiado 📎");
-      } else {
-        throw new Error("Fallback copy failed");
-      }
-    } catch (error) {
-      console.error("Error fallback copy:", error);
-      toast.error("No se pudo copiar el link");
-    }
-
-    document.body.removeChild(textarea);
-  };
-
-  if (loading) return <LoadingPage />;
+  const Experience = EXPERIENCE_COMPONENTS[payload.experience];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gradient-to-b from-pink-50 via-white to-pink-100">
-      <header className="text-center mb-12">
-        <AnimatedCounter target={50} />
-        <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 mt-4">
-          reasons why I love {name} ❤️
-        </h1>
-        <div className="mt-6">
-          <Button onClick={handleShare} className="px-6 py-3">
-            {"share" in navigator ? "Share ❤️" : "Copy link 📎"}
-          </Button>
-        </div>
-      </header>
-
-      <div className="flex flex-wrap justify-center gap-4 max-w-4xl">
-        {reasons.map((reason, index) => (
-          <span
-            key={index}
-            className="
-              relative group bg-pink-200 rounded-full px-5 py-3 text-pink-900 font-semibold shadow-md
-              cursor-pointer transform transition-all duration-300
-              hover:scale-105 hover:-translate-y-1 hover:shadow-xl
-              motion-reduce:transition-none
-            "
-          >
-            {reason}
-            <span
-              className="
-                absolute -top-2 -right-2 w-6 h-6 bg-pink-500 text-white rounded-full
-                flex items-center justify-center text-xs opacity-0 group-hover:opacity-100
-                transition-opacity duration-300
-              "
-            >
-              {index + 1}
-            </span>
-          </span>
-        ))}
-      </div>
-    </div>
+    <I18nContext.Provider value={pageI18n}>
+      <ExperienceShell
+        palette={payload.palette}
+        expiresAt={payload.expiresAt}
+        onExpire={handleExpire}
+      >
+        <Suspense fallback={null}>
+          <Experience
+            name={payload.name}
+            from={payload.from}
+            message={payload.message}
+            reasons={reasons}
+          />
+        </Suspense>
+      </ExperienceShell>
+    </I18nContext.Provider>
   );
 }
 

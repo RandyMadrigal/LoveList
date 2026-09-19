@@ -1,28 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
 
-interface AnimatedCounterProps {
+type AnimatedCounterProps = {
   target: number;
-}
+  className?: string;
+};
 
-function AnimatedCounter({ target }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
+function AnimatedCounter({ target, className = "" }: AnimatedCounterProps) {
+  const reduced = useReducedMotion();
+
+  // The number is a motion value: it updates the DOM directly, with no React re-renders
+  const value = useMotionValue(0);
+  const rounded = useTransform(value, (v) => Math.round(v));
 
   useEffect(() => {
-    let start = 0;
+    if (reduced) {
+      value.set(target);
+      return;
+    }
+    const controls = animate(value, target, {
+      duration: 1.6,
+      ease: [0.22, 1, 0.36, 1],
+    });
+    return () => controls.stop();
+  }, [target, reduced, value]);
 
-    const interval = setInterval(() => {
-      start += 1;
-      setCount(start);
-
-      if (start === target) {
-        clearInterval(interval);
-      }
-    }, 40);
-
-    return () => clearInterval(interval);
-  }, [target]);
-
-  return <span className="text-pink-600 font-bold text-5xl">{count}</span>;
+  return (
+    <motion.span className={`tabular-nums ${className}`} aria-label={String(target)}>
+      {rounded}
+    </motion.span>
+  );
 }
 
 export default AnimatedCounter;
