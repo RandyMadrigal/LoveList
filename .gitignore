@@ -172,3 +172,5 @@ Thumbs.db
 .claude/
 .agents/
 skills-lock.json
+brag-output/
+CLAUDE.md

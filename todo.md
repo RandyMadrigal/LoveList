@@ -11,24 +11,11 @@ Leyenda: 🔴 importante · 🟡 recomendable · 🟢 opcional
 Cosas ya implementadas que no se pudieron comprobar del todo.
 
 - [ ] 🔴 **Vibración en un Android real.** El navegador de escritorio no permite probarla. En iOS Safari no funciona (limitación del navegador).
-- [ ] 🔴 **Arrastre con el dedo** en "Una a la vez". Solo se probó con teclado, clics y arrastres sintéticos.
-- [ ] 🟡 **Experiencia "Scroll" en móvil.** En 390 px solo se revisaron crear, una a la vez, sobre y letra.
-- [ ] 🟡 **Corazones del scroll con el color de la paleta.** Se cambió a máscara con el color de acento, pero no se vio a ojo.
-- [ ] 🟡 **Apodo en pantalla.** La lógica está probada con pruebas automáticas, pero no se vio el resultado en el navegador. Al probarlo, pulsar Enter en el campo del apodo no envió el formulario; falta confirmar si fue la prueba o un fallo real.
-- [ ] 🟡 **Cambio de idioma de la interfaz** en las 4 lenguas, a ojo. Las traducciones se escribieron pero no se recorrieron todas las pantallas.
-- [ ] 🟢 **Logo en pantallas de "enlace caducado" / "enlace inválido".** Se alineó a la izquierda pero el ajuste no se vio.
-- [ ] 🟢 **Animaciones de hover y pulsación** en escritorio.
-- [ ] 🟢 **Un cuelgue puntual de una pestaña** al cargar "Una a la vez" durante las pruebas. No se pudo reproducir después; vigilar si vuelve a pasar.
 
 ---
 
 ## 🛠️ Mejoras pequeñas
 
-- [x] 🟡 Cambiar el texto **"Desliza o usa las flechas del teclado"** por algo neutro como "Desliza", porque en el móvil no hay teclado.
-- [x] 🟡 **Título de la pestaña** (`document.title`) usa el idioma de quien mira, no el de la página. La interfaz sí usa el de la página.
-- [x] 🟡 **Página de privacidad:** mencionar la caducidad de 24 h y que el contenido viaja en el enlace.
-- [x] 🟡 Revisar que el cambio del texto del **footer** (en inglés ahora es solo "❤️") sea coherente en los otros tres idiomas.
-- [x] 🟢 Evitar que el texto "Toca para abrir" del sobre se pueda seleccionar (`select-none`).
 - [ ] 🟢 Botón para **renovar** un enlace a punto de caducar (ahora hay que crear otro).
 - [ ] 🟢 Mostrar el enlace caducado con la opción de **avisar al remitente**, sin guardar datos.
 
@@ -37,13 +24,9 @@ Cosas ya implementadas que no se pudieron comprobar del todo.
 ## 🚀 Antes de publicar
 
 - [ ] 🔴 **`og:image` absoluta.** WhatsApp y Twitter suelen exigir URL completa. Ponerla cuando esté el dominio final (`index.html`).
-- [ ] 🔴 **Revisar las traducciones** de razones y textos en español, portugués y francés con alguien nativo. Las 60 razones por idioma las tradujo Claude.
-- [ ] 🟡 **Renombrar el repositorio y la demo** si se cambia de `LoveList` a `why?`. Actualizar las URL del README.
 - [ ] 🟡 Cambiar el `name` de `package.json` (ahora `whyiloveyou`). Es interno, pero conviene alinearlo con el nuevo nombre.
-- [x] 🟡 **Dividir el bundle** (code-splitting). Hecho: las páginas y cada experiencia se cargan bajo demanda con `React.lazy`. **No usar la opción `lazy` del router**: al probarla, `/create` dejó de responder al hacer scroll (causa sin investigar).
 - [ ] 🟢 Reducir más el bundle principal usando `LazyMotion` de Motion en lugar de la librería completa.
 - [ ] 🟡 **Auditoría de accesibilidad** de las 4 experiencias: contraste, foco, lector de pantalla y navegación por teclado.
-- [ ] 🟢 Añadir un archivo **`LICENSE`** y su badge en el README.
 - [ ] 🟢 Configurar **CI** (lint + build) y añadir el badge de estado.
 
 ---
