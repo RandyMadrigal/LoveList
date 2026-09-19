@@ -69,7 +69,7 @@ function LovePage() {
             className="text-7xl font-bold tracking-[-0.04em] sm:text-8xl"
           />
           <h1 className="display text-[clamp(2rem,6vw,4rem)]">
-            {t("love.title", { count: REASON_COUNT, name: payload.name })}
+            {t("love.heading", { name: payload.name })}
           </h1>
 
           {payload.message && (

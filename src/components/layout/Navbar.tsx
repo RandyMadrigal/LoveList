@@ -1,12 +1,21 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion } from "motion/react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useI18n } from "../../i18n/useI18n";
 import LanguageSelect from "../ui/LanguageSelect";
 
 function Navbar() {
   const { t } = useI18n();
   const { pathname } = useLocation();
-  const overHero = pathname === "/";
+  const { scrollY } = useScroll();
+  const [pastHero, setPastHero] = useState(false);
+
+  // The hero fills the viewport; once it scrolls away the bar sits on light content
+  useMotionValueEvent(scrollY, "change", (y) =>
+    setPastHero(y > window.innerHeight - 96),
+  );
+
+  const overHero = pathname === "/" && !pastHero;
 
   // Over the dark hero the bar is a dark glass; on light pages it flips to a light glass
   const material = overHero

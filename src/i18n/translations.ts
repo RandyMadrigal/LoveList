@@ -53,6 +53,7 @@ const en = {
   "create.copyFailed": "Couldn't copy the link",
 
   "love.title": "{count} reasons why I love {name}",
+  "love.heading": "reasons why I love {name}",
   "love.from": "With love, {from}",
   "love.share": "Share",
   "love.copyLink": "Copy link",
@@ -128,6 +129,7 @@ const es: Dict = {
   "create.copyFailed": "No se pudo copiar el enlace",
 
   "love.title": "{count} razones por las que amo a {name}",
+  "love.heading": "razones por las que amo a {name}",
   "love.from": "Con amor, {from}",
   "love.share": "Compartir",
   "love.copyLink": "Copiar enlace",
@@ -200,6 +202,7 @@ const pt: Dict = {
   "create.copyFailed": "Não foi possível copiar o link",
 
   "love.title": "{count} razões pelas quais amo {name}",
+  "love.heading": "razões pelas quais amo {name}",
   "love.from": "Com amor, {from}",
   "love.share": "Partilhar",
   "love.copyLink": "Copiar link",
@@ -274,6 +277,7 @@ const fr: Dict = {
   "create.copyFailed": "Impossible de copier le lien",
 
   "love.title": "{count} raisons pour lesquelles j'aime {name}",
+  "love.heading": "raisons pour lesquelles j'aime {name}",
   "love.from": "Avec amour, {from}",
   "love.share": "Partager",
   "love.copyLink": "Copier le lien",

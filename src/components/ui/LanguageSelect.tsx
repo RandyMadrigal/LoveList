@@ -14,7 +14,7 @@ function LanguageSelect({ value, onChange, label, className = "" }: LanguageSele
   const current = value ?? lang;
 
   return (
-    <label className="relative inline-flex items-center">
+    <label className="relative flex items-center">
       <span className="sr-only">{label ?? t("nav.language")}</span>
       <select
         value={current}
