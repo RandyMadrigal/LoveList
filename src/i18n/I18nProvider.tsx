@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { I18nContext, type I18nValue } from "./context";
-import { TRANSLATIONS, detectLang, type Lang } from "./translations";
+import { detectLang, translate, type Lang } from "./translations";
 
 export default function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(detectLang);
@@ -22,15 +22,7 @@ export default function I18nProvider({ children }: { children: ReactNode }) {
     () => ({
       lang,
       setLang,
-      t: (key, vars) => {
-        let text = TRANSLATIONS[lang][key];
-        if (vars) {
-          for (const [k, v] of Object.entries(vars)) {
-            text = text.replaceAll(`{${k}}`, String(v));
-          }
-        }
-        return text;
-      },
+      t: (key, vars) => translate(lang, key, vars),
     }),
     [lang, setLang],
   );

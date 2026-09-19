@@ -1,14 +1,26 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
 
 import { Button } from "../../components/ui/Button";
 import LanguageSelect from "../../components/ui/LanguageSelect";
 import ReasonCard from "../../components/love/ReasonCard";
+import {
+  ExperiencePicker,
+  NameModePicker,
+  PalettePicker,
+} from "../../components/create/StylePickers";
+import {
+  DEFAULT_EXPERIENCE,
+  LINK_TTL_MS,
+  type Experience,
+} from "../../constants/experiences";
+import { DEFAULT_PALETTE, type PaletteId } from "../../constants/palettes";
+import { DEFAULT_NAME_MODE, type NameMode } from "../../constants/nameMode";
 import { useI18n } from "../../i18n/useI18n";
 import type { Lang } from "../../i18n/translations";
+import { celebrate } from "../../utils/celebrate";
 import { generateReasons } from "../../utils/generateReasons";
 import {
   LIMITS,
@@ -16,7 +28,7 @@ import {
   randomSeed,
   type LovePayload,
 } from "../../utils/lovePayload";
-import { copyText } from "../../utils/shareLink";
+import { copyText, shareLink } from "../../utils/shareLink";
 
 const fieldClass =
   "w-full rounded-2xl border border-rose-200 bg-white px-4 py-3 text-base outline-offset-2 transition-shadow placeholder:text-rose-mid/50 focus:border-love focus:shadow-[0_0_0_4px_rgba(225,29,99,0.12)]";
@@ -29,7 +41,13 @@ function CreatePage() {
   const [from, setFrom] = useState("");
   const [message, setMessage] = useState("");
   const [pageLang, setPageLang] = useState<Lang>(lang);
+  const [nameMode, setNameMode] = useState<NameMode>(DEFAULT_NAME_MODE);
+  const [nickname, setNickname] = useState("");
+  const [experience, setExperience] = useState<Experience>(DEFAULT_EXPERIENCE);
+  const [palette, setPalette] = useState<PaletteId>(DEFAULT_PALETTE);
   const [seed, setSeed] = useState<string | null>(null);
+  // The 24 hour clock starts when the link is generated
+  const [expiresAt, setExpiresAt] = useState(0);
   const [nameError, setNameError] = useState(false);
 
   const payload: LovePayload | null = useMemo(
@@ -41,19 +59,31 @@ function CreatePage() {
             message: message.trim(),
             seed,
             lang: pageLang,
+            experience,
+            palette,
+            nameMode,
+            nickname: nickname.trim(),
+            expiresAt,
           }
         : null,
-    [seed, name, from, message, pageLang],
+    [seed, name, from, message, pageLang, experience, palette, nameMode, nickname, expiresAt],
   );
 
   const reasons = useMemo(
-    () => (payload ? generateReasons(payload.name, payload.seed, payload.lang) : []),
+    () =>
+      payload
+        ? generateReasons(payload.name, payload.seed, payload.lang, {
+            mode: payload.nameMode,
+            nickname: payload.nickname,
+          })
+        : [],
     [payload],
   );
 
-  const burst = () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+  const generate = () => {
+    setSeed(randomSeed());
+    setExpiresAt(Date.now() + LINK_TTL_MS);
+    celebrate(90);
   };
 
   const handleGenerate = (e: FormEvent) => {
@@ -64,16 +94,21 @@ function CreatePage() {
       return;
     }
     setNameError(false);
-    setSeed(randomSeed());
-    burst();
-  };
-
-  const handleShuffle = () => {
-    setSeed(randomSeed());
-    burst();
+    generate();
   };
 
   const link = payload ? buildLoveUrl(payload) : "";
+
+  const handleShare = async () => {
+    if (!payload) return;
+    const result = await shareLink({
+      title: t("love.shareTitle", { name: payload.name }),
+      text: t("love.shareText", { name: payload.name }),
+      url: link,
+    });
+    if (result === "copied") toast.success(t("create.copied"));
+    else if (result === "failed") toast.error(t("love.failed"));
+  };
 
   const handleCopy = async () => {
     const ok = await copyText(link);
@@ -161,6 +196,37 @@ function CreatePage() {
             />
           </div>
 
+          <NameModePicker value={nameMode} onChange={setNameMode} />
+
+          {nameMode !== "never" && (
+            <div>
+              <label htmlFor="nickname" className="mb-2 block text-sm font-semibold">
+                {t("create.nickname")}
+              </label>
+              <input
+                id="nickname"
+                value={nickname}
+                maxLength={LIMITS.nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                placeholder={t("create.nicknamePh")}
+                autoComplete="off"
+                className={fieldClass}
+              />
+              <p className="mt-2 text-xs text-rose-mid">{t("create.nicknameHint")}</p>
+            </div>
+          )}
+
+          <ExperiencePicker
+            value={experience}
+            palette={palette}
+            onChange={setExperience}
+          />
+          <PalettePicker value={palette} onChange={setPalette} />
+
+          <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-mid">
+            ⏳ {t("create.expiryNote")}
+          </p>
+
           <Button type="submit" className="w-full py-3.5 text-base">
             {t("create.generate")}
           </Button>
@@ -185,10 +251,15 @@ function CreatePage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button onClick={handleCopy}>{t("create.copy")}</Button>
+                {"share" in navigator && (
+                  <Button variant="soft" onClick={handleShare}>
+                    {t("create.share")}
+                  </Button>
+                )}
                 <Button variant="soft" onClick={handleOpen}>
                   {t("create.open")}
                 </Button>
-                <Button variant="soft" onClick={handleShuffle}>
+                <Button variant="soft" onClick={generate}>
                   {t("create.shuffle")}
                 </Button>
               </div>

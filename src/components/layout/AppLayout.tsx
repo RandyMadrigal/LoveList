@@ -18,14 +18,18 @@ function useScrollOnNavigate() {
 
 function AppLayout() {
   useScrollOnNavigate();
+  const { pathname } = useLocation();
+
+  // Love pages are full-screen experiences with their own frame
+  const immersive = pathname.startsWith("/love/");
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <Navbar />
+      {!immersive && <Navbar />}
       <main className="flex-1">
         <Outlet />
       </main>
-      <Footer />
+      {!immersive && <Footer />}
     </div>
   );
 }

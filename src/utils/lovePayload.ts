@@ -1,4 +1,19 @@
 import { LANGS, type Lang } from "../i18n/translations";
+import {
+  DEFAULT_EXPERIENCE,
+  EXPERIENCES,
+  type Experience,
+} from "../constants/experiences";
+import {
+  DEFAULT_PALETTE,
+  PALETTE_IDS,
+  type PaletteId,
+} from "../constants/palettes";
+import {
+  DEFAULT_NAME_MODE,
+  NAME_MODES,
+  type NameMode,
+} from "../constants/nameMode";
 
 // Everything a love page needs lives in the URL, so no backend is required.
 export type LovePayload = {
@@ -7,9 +22,16 @@ export type LovePayload = {
   message: string;
   seed: string;
   lang: Lang;
+  experience: Experience;
+  palette: PaletteId;
+  nameMode: NameMode;
+  /** Optional pet name used instead of the name inside some reasons. */
+  nickname: string;
+  /** Epoch ms after which the link stops working. 0 means "no expiry recorded". */
+  expiresAt: number;
 };
 
-export const LIMITS = { name: 60, from: 60, message: 500 } as const;
+export const LIMITS = { name: 60, from: 60, message: 500, nickname: 30 } as const;
 
 function toBase64Url(bytes: Uint8Array): string {
   let binary = "";
@@ -30,6 +52,11 @@ export function encodePayload(payload: LovePayload): string {
     m: payload.message,
     s: payload.seed,
     l: payload.lang,
+    x: payload.experience,
+    p: payload.palette,
+    k: payload.nameMode,
+    a: payload.nickname,
+    e: payload.expiresAt,
   });
   return toBase64Url(new TextEncoder().encode(json));
 }
@@ -42,7 +69,7 @@ export function decodePayload(token: string | undefined): LovePayload | null {
       new TextDecoder().decode(fromBase64Url(token)),
     );
     if (typeof data !== "object" || data === null) return null;
-    const { n, f, m, s, l } = data as Record<string, unknown>;
+    const { n, f, m, s, l, x, p, k, a, e } = data as Record<string, unknown>;
 
     if (typeof n !== "string" || !n.trim() || n.length > LIMITS.name) return null;
     if (typeof f !== "string" || f.length > LIMITS.from) return null;
@@ -52,7 +79,43 @@ export function decodePayload(token: string | undefined): LovePayload | null {
       return null;
     }
 
-    return { name: n, from: f, message: m, seed: s, lang: l as Lang };
+    // Older links have none of the newer fields: fall back to defaults
+    // (and to expiresAt 0, which counts as already expired).
+    if (
+      x !== undefined &&
+      !(typeof x === "string" && (EXPERIENCES as readonly string[]).includes(x))
+    ) {
+      return null;
+    }
+    if (
+      p !== undefined &&
+      !(typeof p === "string" && (PALETTE_IDS as readonly string[]).includes(p))
+    ) {
+      return null;
+    }
+    if (
+      k !== undefined &&
+      !(typeof k === "string" && (NAME_MODES as readonly string[]).includes(k))
+    ) {
+      return null;
+    }
+    if (a !== undefined && (typeof a !== "string" || a.length > LIMITS.nickname)) {
+      return null;
+    }
+    const expiresAt = typeof e === "number" && Number.isFinite(e) ? e : 0;
+
+    return {
+      name: n,
+      from: f,
+      message: m,
+      seed: s,
+      lang: l as Lang,
+      experience: (x as Experience | undefined) ?? DEFAULT_EXPERIENCE,
+      palette: (p as PaletteId | undefined) ?? DEFAULT_PALETTE,
+      nameMode: (k as NameMode | undefined) ?? DEFAULT_NAME_MODE,
+      nickname: (a as string | undefined) ?? "",
+      expiresAt,
+    };
   } catch {
     return null;
   }

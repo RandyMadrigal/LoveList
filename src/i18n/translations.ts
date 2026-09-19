@@ -26,7 +26,8 @@ const en = {
   "how.1.title": "Write a name",
   "how.1.text": "Add who it's for, who it's from, and an optional message.",
   "how.2.title": "Preview the reasons",
-  "how.2.text": "We pick 50 reasons in your language. Not feeling them? Shuffle.",
+  "how.2.text":
+    "We pick 50 reasons in your language. Not feeling them? Shuffle.",
   "how.3.title": "Share the link",
   "how.3.text":
     "The whole page lives inside the link. Nothing is stored on any server.",
@@ -77,8 +78,57 @@ const en = {
   "privacy.p2":
     "When you create a page, its content (name, message and a random seed) is encoded inside the link. Anyone who has the link can read it, so only share it with the people you mean to.",
   "privacy.p3": "Your language choice is saved locally in your browser.",
-  "footer.made": "Made with ❤️ for the people we love",
+  "footer.made": "❤️",
   "footer.privacy": "Privacy",
+
+  "create.styleTitle": "Choose the experience",
+  "create.paletteTitle": "Pick a color mood",
+  "create.expiryNote":
+    "This link lasts 24 hours from the moment you create it.",
+  "create.share": "Share",
+  "create.nameModeTitle": "Their name inside the reasons",
+  "create.nickname": "Pet name (optional)",
+  "create.nicknamePh": "e.g. sweetheart",
+  "create.nicknameHint":
+    "Used instead of their name in the reasons that mention it.",
+  "nameMode.never": "Never",
+  "nameMode.sometimes": "Sometimes",
+  "nameMode.always": "Always",
+
+  "exp.story.name": "One at a time",
+  "exp.story.desc": "Swipe through full-screen reasons.",
+  "exp.envelope.name": "Envelope",
+  "exp.envelope.desc": "A sealed letter that opens with a tap.",
+  "exp.lyrics.name": "Lyrics",
+  "exp.lyrics.desc": "Reasons glow one by one, like a song.",
+  "exp.scroll.name": "Scroll story",
+  "exp.scroll.desc": "One reason per screen as you scroll.",
+
+  "palette.rose": "Rose",
+  "palette.sunset": "Sunset",
+  "palette.midnight": "Midnight",
+  "palette.lavender": "Lavender",
+  "palette.mint": "Mint",
+  "palette.gold": "Gold",
+
+  "exp.expiresIn": "Disappears in {time}",
+  "exp.swipe": "Swipe or use the arrow keys",
+  "exp.progress": "{n} / {total}",
+  "exp.introFor": "For {name}",
+  "exp.endTitle": "And that's only the beginning.",
+  "exp.tapToOpen": "Tap to open",
+  "exp.letterFallback":
+    "I wrote down some things I've always wanted to tell you.",
+  "exp.readReasons": "Read the reasons",
+  "exp.play": "Play",
+  "exp.pause": "Pause",
+  "exp.prev": "Previous",
+  "exp.next": "Next",
+  "exp.vibrationOn": "Vibration on",
+  "exp.vibrationOff": "Vibration off",
+  "exp.scrollHint": "Scroll",
+  "expired.title": "This link has expired",
+  "expired.text": "Links last 24 hours. Ask for a new one, or make your own.",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -100,9 +150,11 @@ const es: Dict = {
 
   "how.title": "Tres pasos. Un enlace inolvidable.",
   "how.1.title": "Escribe un nombre",
-  "how.1.text": "Indica para quién es, de parte de quién y un mensaje opcional.",
+  "how.1.text":
+    "Indica para quién es, de parte de quién y un mensaje opcional.",
   "how.2.title": "Mira las razones",
-  "how.2.text": "Elegimos 50 razones en tu idioma. ¿No te convencen? Mézclalas.",
+  "how.2.text":
+    "Elegimos 50 razones en tu idioma. ¿No te convencen? Mézclalas.",
   "how.3.title": "Comparte el enlace",
   "how.3.text":
     "Toda la página vive dentro del enlace. No se guarda nada en ningún servidor.",
@@ -153,8 +205,56 @@ const es: Dict = {
   "privacy.p2":
     "Al crear una página, su contenido (nombre, mensaje y una semilla aleatoria) se codifica dentro del enlace. Cualquiera que tenga el enlace puede leerlo, así que compártelo solo con quien quieras.",
   "privacy.p3": "Tu idioma se guarda localmente en tu navegador.",
-  "footer.made": "Hecho con ❤️ para las personas que amamos",
+  "footer.made": "❤️",
   "footer.privacy": "Privacidad",
+
+  "create.styleTitle": "Elige la experiencia",
+  "create.paletteTitle": "Elige un ambiente de color",
+  "create.expiryNote":
+    "Este enlace dura 24 horas desde el momento en que lo creas.",
+  "create.share": "Compartir",
+  "create.nameModeTitle": "Su nombre dentro de las razones",
+  "create.nickname": "Apodo cariñoso (opcional)",
+  "create.nicknamePh": "ej. mi vida",
+  "create.nicknameHint":
+    "Se usa en lugar del nombre en las razones que lo mencionan.",
+  "nameMode.never": "Nunca",
+  "nameMode.sometimes": "A veces",
+  "nameMode.always": "Siempre",
+
+  "exp.story.name": "Una a la vez",
+  "exp.story.desc": "Desliza razones a pantalla completa.",
+  "exp.envelope.name": "Sobre",
+  "exp.envelope.desc": "Una carta sellada que se abre con un toque.",
+  "exp.lyrics.name": "Letra",
+  "exp.lyrics.desc": "Las razones se iluminan una a una, como una canción.",
+  "exp.scroll.name": "Historia con scroll",
+  "exp.scroll.desc": "Una razón por pantalla mientras bajas.",
+
+  "palette.rose": "Rosa",
+  "palette.sunset": "Atardecer",
+  "palette.midnight": "Medianoche",
+  "palette.lavender": "Lavanda",
+  "palette.mint": "Menta",
+  "palette.gold": "Dorado",
+
+  "exp.expiresIn": "Desaparece en {time}",
+  "exp.swipe": "Desliza o usa las flechas del teclado",
+  "exp.progress": "{n} / {total}",
+  "exp.introFor": "Para {name}",
+  "exp.endTitle": "Y esto es solo el comienzo.",
+  "exp.tapToOpen": "Toca para abrir",
+  "exp.letterFallback": "Escribí algunas cosas que siempre he querido decirte.",
+  "exp.readReasons": "Leer las razones",
+  "exp.play": "Reproducir",
+  "exp.pause": "Pausar",
+  "exp.prev": "Anterior",
+  "exp.next": "Siguiente",
+  "exp.vibrationOn": "Vibración activada",
+  "exp.vibrationOff": "Vibración desactivada",
+  "exp.scrollHint": "Desliza",
+  "expired.title": "Este enlace caducó",
+  "expired.text": "Los enlaces duran 24 horas. Pide uno nuevo o crea el tuyo.",
 };
 
 const pt: Dict = {
@@ -226,8 +326,55 @@ const pt: Dict = {
   "privacy.p2":
     "Ao criar uma página, o seu conteúdo (nome, mensagem e uma semente aleatória) é codificado dentro do link. Quem tiver o link pode lê-lo, por isso partilha-o só com quem quiseres.",
   "privacy.p3": "O teu idioma é guardado localmente no navegador.",
-  "footer.made": "Feito com ❤️ para as pessoas que amamos",
+  "footer.made": "❤️",
   "footer.privacy": "Privacidade",
+
+  "create.styleTitle": "Escolhe a experiência",
+  "create.paletteTitle": "Escolhe um ambiente de cor",
+  "create.expiryNote":
+    "Este link dura 24 horas desde o momento em que o crias.",
+  "create.share": "Partilhar",
+  "create.nameModeTitle": "O nome dentro das razões",
+  "create.nickname": "Apelido carinhoso (opcional)",
+  "create.nicknamePh": "ex.: meu amor",
+  "create.nicknameHint": "Usado no lugar do nome nas razões que o mencionam.",
+  "nameMode.never": "Nunca",
+  "nameMode.sometimes": "Às vezes",
+  "nameMode.always": "Sempre",
+
+  "exp.story.name": "Uma de cada vez",
+  "exp.story.desc": "Desliza razões em ecrã inteiro.",
+  "exp.envelope.name": "Envelope",
+  "exp.envelope.desc": "Uma carta selada que se abre com um toque.",
+  "exp.lyrics.name": "Letra",
+  "exp.lyrics.desc": "As razões acendem-se uma a uma, como uma canção.",
+  "exp.scroll.name": "História com scroll",
+  "exp.scroll.desc": "Uma razão por ecrã enquanto desces.",
+
+  "palette.rose": "Rosa",
+  "palette.sunset": "Pôr do sol",
+  "palette.midnight": "Meia-noite",
+  "palette.lavender": "Lavanda",
+  "palette.mint": "Menta",
+  "palette.gold": "Dourado",
+
+  "exp.expiresIn": "Desaparece em {time}",
+  "exp.swipe": "Desliza ou usa as setas do teclado",
+  "exp.progress": "{n} / {total}",
+  "exp.introFor": "Para {name}",
+  "exp.endTitle": "E isto é só o começo.",
+  "exp.tapToOpen": "Toca para abrir",
+  "exp.letterFallback": "Escrevi algumas coisas que sempre quis dizer-te.",
+  "exp.readReasons": "Ler as razões",
+  "exp.play": "Reproduzir",
+  "exp.pause": "Pausar",
+  "exp.prev": "Anterior",
+  "exp.next": "Seguinte",
+  "exp.vibrationOn": "Vibração ativada",
+  "exp.vibrationOff": "Vibração desativada",
+  "exp.scrollHint": "Desliza",
+  "expired.title": "Este link expirou",
+  "expired.text": "Os links duram 24 horas. Pede um novo ou cria o teu.",
 };
 
 const fr: Dict = {
@@ -302,11 +449,75 @@ const fr: Dict = {
     "Quand tu crées une page, son contenu (prénom, message et une graine aléatoire) est encodé dans le lien. Toute personne qui a le lien peut le lire : ne le partage qu'avec qui tu veux.",
   "privacy.p3":
     "Ton choix de langue est enregistré localement dans ton navigateur.",
-  "footer.made": "Fait avec ❤️ pour celles et ceux que nous aimons",
+  "footer.made": "❤️",
   "footer.privacy": "Confidentialité",
+
+  "create.styleTitle": "Choisis l'expérience",
+  "create.paletteTitle": "Choisis une ambiance de couleur",
+  "create.expiryNote":
+    "Ce lien dure 24 heures à partir du moment où tu le crées.",
+  "create.share": "Partager",
+  "create.nameModeTitle": "Son prénom dans les raisons",
+  "create.nickname": "Petit nom (facultatif)",
+  "create.nicknamePh": "ex. mon cœur",
+  "create.nicknameHint":
+    "Utilisé à la place du prénom dans les raisons qui le mentionnent.",
+  "nameMode.never": "Jamais",
+  "nameMode.sometimes": "Parfois",
+  "nameMode.always": "Toujours",
+
+  "exp.story.name": "Une à la fois",
+  "exp.story.desc": "Fais défiler les raisons en plein écran.",
+  "exp.envelope.name": "Enveloppe",
+  "exp.envelope.desc": "Une lettre scellée qui s'ouvre d'un toucher.",
+  "exp.lyrics.name": "Paroles",
+  "exp.lyrics.desc": "Les raisons s'illuminent une à une, comme une chanson.",
+  "exp.scroll.name": "Histoire à défiler",
+  "exp.scroll.desc": "Une raison par écran en faisant défiler.",
+
+  "palette.rose": "Rose",
+  "palette.sunset": "Coucher de soleil",
+  "palette.midnight": "Minuit",
+  "palette.lavender": "Lavande",
+  "palette.mint": "Menthe",
+  "palette.gold": "Doré",
+
+  "exp.expiresIn": "Disparaît dans {time}",
+  "exp.swipe": "Glisse ou utilise les flèches du clavier",
+  "exp.progress": "{n} / {total}",
+  "exp.introFor": "Pour {name}",
+  "exp.endTitle": "Et ce n'est que le début.",
+  "exp.tapToOpen": "Touche pour ouvrir",
+  "exp.letterFallback":
+    "J'ai noté quelques choses que j'ai toujours voulu te dire.",
+  "exp.readReasons": "Lire les raisons",
+  "exp.play": "Lecture",
+  "exp.pause": "Pause",
+  "exp.prev": "Précédent",
+  "exp.next": "Suivant",
+  "exp.vibrationOn": "Vibration activée",
+  "exp.vibrationOff": "Vibration désactivée",
+  "exp.scrollHint": "Défile",
+  "expired.title": "Ce lien a expiré",
+  "expired.text":
+    "Les liens durent 24 heures. Demandes-en un nouveau ou crée le tien.",
 };
 
 export const TRANSLATIONS: Record<Lang, Dict> = { en, es, pt, fr };
+
+export function translate(
+  lang: Lang,
+  key: TranslationKey,
+  vars?: Record<string, string | number>,
+): string {
+  let text = TRANSLATIONS[lang][key];
+  if (vars) {
+    for (const [k, v] of Object.entries(vars)) {
+      text = text.replaceAll(`{${k}}`, String(v));
+    }
+  }
+  return text;
+}
 
 export function detectLang(): Lang {
   try {
