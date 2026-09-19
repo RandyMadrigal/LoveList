@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import ExperienceShell from "../../components/experience/ExperienceShell";
 import { I18nContext, type I18nValue } from "../../i18n/context";
 import { translate } from "../../i18n/translations";
-import { useI18n } from "../../i18n/useI18n";
 import { generateReasons } from "../../utils/generateReasons";
 import { decodePayload } from "../../utils/lovePayload";
 import InvalidLinkPage from "./InvalidLinkPage";
@@ -22,7 +21,6 @@ const EXPERIENCE_COMPONENTS = {
 
 function LovePage() {
   const { token } = useParams<{ token: string }>();
-  const { t } = useI18n();
 
   const payload = useMemo(() => decodePayload(token), [token]);
   const reasons = useMemo(
@@ -56,10 +54,14 @@ function LovePage() {
     [pageLang],
   );
 
+  // The tab title also follows the page language
   useEffect(() => {
     if (!payload) return;
-    document.title = t("love.title", { count: REASON_COUNT, name: payload.name });
-  }, [payload, t]);
+    document.title = translate(payload.lang, "love.title", {
+      count: REASON_COUNT,
+      name: payload.name,
+    });
+  }, [payload]);
 
   if (!payload || !pageI18n) return <InvalidLinkPage />;
   if (expired || payload.expiresAt <= mountedAt) return <ExpiredLinkPage />;

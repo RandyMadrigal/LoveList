@@ -78,6 +78,8 @@ const en = {
   "privacy.p2":
     "When you create a page, its content (name, message and a random seed) is encoded inside the link. Anyone who has the link can read it, so only share it with the people you mean to.",
   "privacy.p3": "Your language choice is saved locally in your browser.",
+  "privacy.p4":
+    "Links stop working 24 hours after they are created. That check happens in your browser, so it hides the page but does not erase what is inside the link.",
   "footer.made": "❤️",
   "footer.privacy": "Privacy",
 
@@ -112,7 +114,7 @@ const en = {
   "palette.gold": "Gold",
 
   "exp.expiresIn": "Disappears in {time}",
-  "exp.swipe": "Swipe or use the arrow keys",
+  "exp.swipe": "Swipe to continue",
   "exp.progress": "{n} / {total}",
   "exp.introFor": "For {name}",
   "exp.endTitle": "And that's only the beginning.",
@@ -205,6 +207,8 @@ const es: Dict = {
   "privacy.p2":
     "Al crear una página, su contenido (nombre, mensaje y una semilla aleatoria) se codifica dentro del enlace. Cualquiera que tenga el enlace puede leerlo, así que compártelo solo con quien quieras.",
   "privacy.p3": "Tu idioma se guarda localmente en tu navegador.",
+  "privacy.p4":
+    "Los enlaces dejan de funcionar 24 horas después de crearse. Esa comprobación ocurre en tu navegador: oculta la página, pero no borra lo que va dentro del enlace.",
   "footer.made": "❤️",
   "footer.privacy": "Privacidad",
 
@@ -239,7 +243,7 @@ const es: Dict = {
   "palette.gold": "Dorado",
 
   "exp.expiresIn": "Desaparece en {time}",
-  "exp.swipe": "Desliza o usa las flechas del teclado",
+  "exp.swipe": "Desliza para continuar",
   "exp.progress": "{n} / {total}",
   "exp.introFor": "Para {name}",
   "exp.endTitle": "Y esto es solo el comienzo.",
@@ -326,6 +330,8 @@ const pt: Dict = {
   "privacy.p2":
     "Ao criar uma página, o seu conteúdo (nome, mensagem e uma semente aleatória) é codificado dentro do link. Quem tiver o link pode lê-lo, por isso partilha-o só com quem quiseres.",
   "privacy.p3": "O teu idioma é guardado localmente no navegador.",
+  "privacy.p4":
+    "Os links deixam de funcionar 24 horas depois de criados. Essa verificação acontece no teu navegador: esconde a página, mas não apaga o que vai dentro do link.",
   "footer.made": "❤️",
   "footer.privacy": "Privacidade",
 
@@ -359,7 +365,7 @@ const pt: Dict = {
   "palette.gold": "Dourado",
 
   "exp.expiresIn": "Desaparece em {time}",
-  "exp.swipe": "Desliza ou usa as setas do teclado",
+  "exp.swipe": "Desliza para continuar",
   "exp.progress": "{n} / {total}",
   "exp.introFor": "Para {name}",
   "exp.endTitle": "E isto é só o começo.",
@@ -449,6 +455,8 @@ const fr: Dict = {
     "Quand tu crées une page, son contenu (prénom, message et une graine aléatoire) est encodé dans le lien. Toute personne qui a le lien peut le lire : ne le partage qu'avec qui tu veux.",
   "privacy.p3":
     "Ton choix de langue est enregistré localement dans ton navigateur.",
+  "privacy.p4":
+    "Les liens cessent de fonctionner 24 heures après leur création. Cette vérification se fait dans ton navigateur : elle masque la page mais n'efface pas ce que contient le lien.",
   "footer.made": "❤️",
   "footer.privacy": "Confidentialité",
 
@@ -483,7 +491,7 @@ const fr: Dict = {
   "palette.gold": "Doré",
 
   "exp.expiresIn": "Disparaît dans {time}",
-  "exp.swipe": "Glisse ou utilise les flèches du clavier",
+  "exp.swipe": "Glisse pour continuer",
   "exp.progress": "{n} / {total}",
   "exp.introFor": "Pour {name}",
   "exp.endTitle": "Et ce n'est que le début.",

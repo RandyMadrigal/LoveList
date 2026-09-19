@@ -24,11 +24,11 @@ Cosas ya implementadas que no se pudieron comprobar del todo.
 
 ## 🛠️ Mejoras pequeñas
 
-- [ ] 🟡 Cambiar el texto **"Desliza o usa las flechas del teclado"** por algo neutro como "Desliza", porque en el móvil no hay teclado.
-- [ ] 🟡 **Título de la pestaña** (`document.title`) usa el idioma de quien mira, no el de la página. La interfaz sí usa el de la página.
-- [ ] 🟡 **Página de privacidad:** mencionar la caducidad de 24 h y que el contenido viaja en el enlace.
-- [ ] 🟡 Revisar que el cambio del texto del **footer** (en inglés ahora es solo "❤️") sea coherente en los otros tres idiomas.
-- [ ] 🟢 Evitar que el texto "Toca para abrir" del sobre se pueda seleccionar (`select-none`).
+- [x] 🟡 Cambiar el texto **"Desliza o usa las flechas del teclado"** por algo neutro como "Desliza", porque en el móvil no hay teclado.
+- [x] 🟡 **Título de la pestaña** (`document.title`) usa el idioma de quien mira, no el de la página. La interfaz sí usa el de la página.
+- [x] 🟡 **Página de privacidad:** mencionar la caducidad de 24 h y que el contenido viaja en el enlace.
+- [x] 🟡 Revisar que el cambio del texto del **footer** (en inglés ahora es solo "❤️") sea coherente en los otros tres idiomas.
+- [x] 🟢 Evitar que el texto "Toca para abrir" del sobre se pueda seleccionar (`select-none`).
 - [ ] 🟢 Botón para **renovar** un enlace a punto de caducar (ahora hay que crear otro).
 - [ ] 🟢 Mostrar el enlace caducado con la opción de **avisar al remitente**, sin guardar datos.
 

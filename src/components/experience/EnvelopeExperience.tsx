@@ -81,7 +81,9 @@ function EnvelopeExperience({ name, from, message, reasons }: ExperienceProps) {
               </span>
             </motion.button>
 
-            <p className="glass rounded-full px-4 py-2 text-sm">{t("exp.tapToOpen")}</p>
+            <p className="glass select-none rounded-full px-4 py-2 text-sm">
+              {t("exp.tapToOpen")}
+            </p>
           </motion.div>
         )}
 

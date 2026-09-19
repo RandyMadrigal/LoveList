@@ -10,6 +10,7 @@ function PrivacyPage() {
         <p>{t("privacy.p1")}</p>
         <p>{t("privacy.p2")}</p>
         <p>{t("privacy.p3")}</p>
+        <p>{t("privacy.p4")}</p>
       </article>
     </div>
   );
