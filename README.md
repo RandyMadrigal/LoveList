@@ -15,7 +15,7 @@
 **why?** is a romantic single-page application (SPA) built with **Vite**, **React**, **TailwindCSS** and **Motion**.
 You write a name, pick how the page should feel, and share a link. There is no account and no database: the whole page lives inside the link.
 
-🔗 **Live Demo:** [https://love-list-mu.vercel.app](https://love-list-mu.vercel.app)
+🔗 **Live Demo:** [https://love-list-mu.vercel.app](https://love-list-khaki.vercel.app/)
 
 ---
 
