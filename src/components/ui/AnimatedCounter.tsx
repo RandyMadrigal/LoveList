@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
-import { animate, useReducedMotion } from "motion/react";
+import { useEffect } from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
 
 type AnimatedCounterProps = {
   target: number;
@@ -8,26 +14,27 @@ type AnimatedCounterProps = {
 
 function AnimatedCounter({ target, className = "" }: AnimatedCounterProps) {
   const reduced = useReducedMotion();
-  const [count, setCount] = useState(0);
+
+  // The number is a motion value: it updates the DOM directly, with no React re-renders
+  const value = useMotionValue(0);
+  const rounded = useTransform(value, (v) => Math.round(v));
 
   useEffect(() => {
     if (reduced) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCount(target);
+      value.set(target);
       return;
     }
-    const controls = animate(0, target, {
+    const controls = animate(value, target, {
       duration: 1.6,
       ease: [0.22, 1, 0.36, 1],
-      onUpdate: (value) => setCount(Math.round(value)),
     });
     return () => controls.stop();
-  }, [target, reduced]);
+  }, [target, reduced, value]);
 
   return (
-    <span className={`tabular-nums ${className}`} aria-label={String(target)}>
-      {count}
-    </span>
+    <motion.span className={`tabular-nums ${className}`} aria-label={String(target)}>
+      {rounded}
+    </motion.span>
   );
 }
 

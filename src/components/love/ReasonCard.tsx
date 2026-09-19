@@ -11,14 +11,14 @@ function ReasonCard({ reason, index }: ReasonCardProps) {
 
   return (
     <motion.li
+      // Animates on mount with a capped stagger: no per-card visibility observer
       initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
         type: "spring",
         bounce: 0,
         duration: 0.5,
-        delay: (index % 3) * 0.05,
+        delay: Math.min(index, 8) * 0.04,
       }}
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.98 }}

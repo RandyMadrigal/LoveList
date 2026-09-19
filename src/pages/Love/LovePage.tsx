@@ -1,11 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import ExperienceShell from "../../components/experience/ExperienceShell";
-import StoryExperience from "../../components/experience/StoryExperience";
-import EnvelopeExperience from "../../components/experience/EnvelopeExperience";
-import LyricsExperience from "../../components/experience/LyricsExperience";
-import ScrollExperience from "../../components/experience/ScrollExperience";
 import { I18nContext, type I18nValue } from "../../i18n/context";
 import { translate } from "../../i18n/translations";
 import { useI18n } from "../../i18n/useI18n";
@@ -16,11 +12,12 @@ import ExpiredLinkPage from "./ExpiredLinkPage";
 
 const REASON_COUNT = 50;
 
+// Only the chosen experience is downloaded
 const EXPERIENCE_COMPONENTS = {
-  story: StoryExperience,
-  envelope: EnvelopeExperience,
-  lyrics: LyricsExperience,
-  scroll: ScrollExperience,
+  story: lazy(() => import("../../components/experience/StoryExperience")),
+  envelope: lazy(() => import("../../components/experience/EnvelopeExperience")),
+  lyrics: lazy(() => import("../../components/experience/LyricsExperience")),
+  scroll: lazy(() => import("../../components/experience/ScrollExperience")),
 } as const;
 
 function LovePage() {
@@ -76,12 +73,14 @@ function LovePage() {
         expiresAt={payload.expiresAt}
         onExpire={handleExpire}
       >
-        <Experience
-          name={payload.name}
-          from={payload.from}
-          message={payload.message}
-          reasons={reasons}
-        />
+        <Suspense fallback={null}>
+          <Experience
+            name={payload.name}
+            from={payload.from}
+            message={payload.message}
+            reasons={reasons}
+          />
+        </Suspense>
       </ExperienceShell>
     </I18nContext.Provider>
   );

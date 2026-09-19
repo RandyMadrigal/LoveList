@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import AnimatedCounter from "../ui/AnimatedCounter";
 import { ButtonLink } from "../ui/Button";
@@ -27,20 +27,22 @@ function Heart({ className }: { className: string }) {
 function ScrollExperience({ name, from, message, reasons }: ExperienceProps) {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [section, setSection] = useState(0);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const currentSection = useRef(0);
 
   const { scrollYProgress } = useScroll({ container: containerRef });
   const farHearts = useTransform(scrollYProgress, [0, 1], [0, -500]);
   const nearHearts = useTransform(scrollYProgress, [0, 1], [0, -1100]);
 
+  // The hue is written straight to the element: no state, so the 50+ sections never re-render
   const handleScroll = () => {
     const el = containerRef.current;
     if (!el) return;
     const next = Math.round(el.scrollTop / el.clientHeight);
-    if (next !== section) {
-      setSection(next);
-      vibrate(6);
-    }
+    if (next === currentSection.current) return;
+    currentSection.current = next;
+    glowRef.current?.style.setProperty("filter", `hue-rotate(${next * 3}deg)`);
+    vibrate(6);
   };
 
   const reveal = {
@@ -57,12 +59,12 @@ function ScrollExperience({ name, from, message, reasons }: ExperienceProps) {
     <>
       {/* Drifting glow: hue rotates with the section */}
       <div
+        ref={glowRef}
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 transition-[filter] duration-700 motion-reduce:transition-none"
         style={{
           background:
             "radial-gradient(70% 60% at 50% 50%, color-mix(in srgb, var(--c-accent) 32%, transparent), transparent 70%)",
-          filter: `hue-rotate(${section * 3}deg)`,
         }}
       />
 

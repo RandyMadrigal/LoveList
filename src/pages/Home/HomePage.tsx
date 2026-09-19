@@ -23,6 +23,9 @@ function HomePage() {
 
   return (
     <>
+      {/* Only the home page uses the hero image; React hoists this into <head> */}
+      <link rel="preload" as="image" href="/hero.jpg" fetchPriority="high" />
+
       {/* Full-screen hero */}
       <section
         className="relative flex h-dvh min-h-[560px] items-center justify-center overflow-hidden bg-rose-950 bg-cover bg-center px-6 text-center text-white"

@@ -108,7 +108,8 @@ function LyricsExperience({ name, from, message, reasons }: ExperienceProps) {
                 className="origin-left cursor-pointer py-3 transition-[opacity,filter,transform] duration-500 ease-[var(--ease-out-soft)] motion-reduce:transition-none"
                 style={{
                   opacity: isActive ? 1 : Math.max(0.16, 0.55 - distance * 0.14),
-                  filter: isActive ? "none" : `blur(${Math.min(distance * 1.2, 5)}px)`,
+                  // Lines beyond 4 are already faded out by the mask, so skip their blur layers
+                  filter: isActive || distance > 4 ? "none" : `blur(${distance * 1.2}px)`,
                   transform: `scale(${isActive ? 1 : 0.92})`,
                 }}
               >

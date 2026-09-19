@@ -124,9 +124,13 @@ function EnvelopeExperience({ name, from, message, reasons }: ExperienceProps) {
                 <motion.li
                   key={i}
                   initial={{ opacity: 0, y: -28, rotate: i % 2 ? 2.5 : -2.5 }}
-                  whileInView={{ opacity: 1, y: 0, rotate: i % 2 ? 0.8 : -0.8 }}
-                  viewport={{ once: true, margin: "0px 0px -40px 0px" }}
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  animate={{ opacity: 1, y: 0, rotate: i % 2 ? 0.8 : -0.8 }}
+                  transition={{
+                    type: "spring",
+                    bounce: 0.2,
+                    duration: 0.6,
+                    delay: Math.min(i, 8) * 0.06,
+                  }}
                   className="rounded-2xl bg-[#fffaf5] px-6 py-5 text-lg font-medium leading-snug tracking-[-0.01em] text-[#3b0d22] shadow-xl"
                 >
                   {reason}

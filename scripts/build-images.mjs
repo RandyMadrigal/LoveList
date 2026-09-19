@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 const svg = await readFile(new URL("../art/hero.svg", import.meta.url));
 
 await sharp(svg, { density: 96 })
-  .resize(2560, 1440)
+  .resize(1920, 1080)
   .jpeg({ quality: 82, mozjpeg: true })
   .toFile(new URL("../public/hero.jpg", import.meta.url).pathname.replace(/^\/(\w:)/, "$1"));
 
