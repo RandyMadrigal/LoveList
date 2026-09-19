@@ -1,39 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import CenteredLayout from "../layouts/CenteredLayout";
-import PageLayout from "../layouts/PageLayout";
-
+import AppLayout from "../components/layout/AppLayout";
 import HomePage from "../pages/Home/HomePage";
 import CreatePage from "../pages/Create/CreatePage";
 import LovePage from "../pages/Love/LovePage";
+import PrivacyPage from "../pages/Privacy/PrivacyPage";
 import NotFoundPage from "../pages/NotFound/NotFoundPage";
 
 const router = createBrowserRouter([
   {
-    element: <CenteredLayout />,
+    element: <AppLayout />,
     children: [
-      {
-        path: "/",
-        element: <HomePage />,
-      },
-      {
-        path: "/create",
-        element: <CreatePage />,
-      },
+      { path: "/", element: <HomePage /> },
+      { path: "/create", element: <CreatePage /> },
+      { path: "/love/:token", element: <LovePage /> },
+      { path: "/privacy", element: <PrivacyPage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
-  },
-  {
-    element: <PageLayout />,
-    children: [
-      {
-        path: "/love/:slug",
-        element: <LovePage />,
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
   },
 ]);
 

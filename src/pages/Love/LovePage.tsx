@@ -1,116 +1,106 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { motion } from "motion/react";
 import confetti from "canvas-confetti";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import AnimatedCounter from "../../components/ui/AnimatedCounter";
-import { useLovePage } from "../../hooks/useLovePage";
-import Button from "../../components/ui/Button";
-import LoadingPage from "./LoadingPage";
+import { Button, ButtonLink } from "../../components/ui/Button";
+import ReasonCard from "../../components/love/ReasonCard";
+import { useI18n } from "../../i18n/useI18n";
+import { generateReasons } from "../../utils/generateReasons";
+import { decodePayload } from "../../utils/lovePayload";
+import { shareLink } from "../../utils/shareLink";
+import InvalidLinkPage from "./InvalidLinkPage";
+
+const REASON_COUNT = 50;
 
 function LovePage() {
-  const { name, reasons, loading } = useLovePage();
+  const { token } = useParams<{ token: string }>();
+  const { t } = useI18n();
+
+  const payload = useMemo(() => decodePayload(token), [token]);
+  const reasons = useMemo(
+    () =>
+      payload ? generateReasons(payload.name, payload.seed, payload.lang, REASON_COUNT) : [],
+    [payload],
+  );
 
   useEffect(() => {
-    if (!loading) {
-      confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.6 },
-      });
+    if (!payload) return;
+    document.title = t("love.title", { count: REASON_COUNT, name: payload.name });
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.55 } });
     }
-  }, [loading]);
+  }, [payload, t]);
+
+  if (!payload) return <InvalidLinkPage />;
+
+  const canShare = "share" in navigator;
 
   const handleShare = async () => {
-    const url = window.location.href;
-
-    if ("share" in navigator) {
-      try {
-        await navigator.share({
-          title: `30 razones por las que amo a ${name}`,
-          text: `Descubre por qué ${name} es tan especial para mí ❤️`,
-          url,
-        });
-        return;
-      } catch (error) {
-        console.error("Error Web Share API:", error);
-        toast.error("No se pudo compartir con la API nativa");
-      }
-    }
-
-    if (navigator.clipboard && window.isSecureContext) {
-      try {
-        await navigator.clipboard.writeText(url);
-        toast.success("Link copiado 📎");
-        return;
-      } catch (error) {
-        console.error("Error Clipboard API:", error);
-      }
-    }
-
-    const textarea = document.createElement("textarea");
-    textarea.value = url;
-    textarea.style.position = "fixed";
-    textarea.style.left = "-9999px";
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
-
-    try {
-      const successful = document.execCommand("copy");
-      if (successful) {
-        toast.success("Link copiado 📎");
-      } else {
-        throw new Error("Fallback copy failed");
-      }
-    } catch (error) {
-      console.error("Error fallback copy:", error);
-      toast.error("No se pudo copiar el link");
-    }
-
-    document.body.removeChild(textarea);
+    const result = await shareLink({
+      title: t("love.shareTitle", { name: payload.name }),
+      text: t("love.shareText", { name: payload.name }),
+      url: window.location.href,
+    });
+    if (result === "copied") toast.success(t("love.copied"));
+    else if (result === "failed") toast.error(t("love.failed"));
   };
 
-  if (loading) return <LoadingPage />;
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gradient-to-b from-pink-50 via-white to-pink-100">
-      <header className="text-center mb-12">
-        <AnimatedCounter target={50} />
-        <h1 className="text-4xl md:text-5xl font-extrabold text-pink-600 mt-4">
-          reasons why I love {name} ❤️
-        </h1>
-        <div className="mt-6">
-          <Button onClick={handleShare} className="px-6 py-3">
-            {"share" in navigator ? "Share ❤️" : "Copy link 📎"}
-          </Button>
-        </div>
-      </header>
+    <>
+      <section
+        className="relative flex min-h-[85dvh] items-center justify-center overflow-hidden bg-rose-950 bg-cover bg-center px-6 pb-16 pt-32 text-center text-white"
+        style={{ backgroundImage: "url(/hero.jpg)" }}
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/50"
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", bounce: 0, duration: 0.8 }}
+          className="relative mx-auto flex max-w-3xl flex-col items-center gap-5"
+        >
+          <AnimatedCounter
+            target={REASON_COUNT}
+            className="text-7xl font-bold tracking-[-0.04em] sm:text-8xl"
+          />
+          <h1 className="display text-[clamp(2rem,6vw,4rem)]">
+            {t("love.title", { count: REASON_COUNT, name: payload.name })}
+          </h1>
 
-      <div className="flex flex-wrap justify-center gap-4 max-w-4xl">
-        {reasons.map((reason, index) => (
-          <span
-            key={index}
-            className="
-              relative group bg-pink-200 rounded-full px-5 py-3 text-pink-900 font-semibold shadow-md
-              cursor-pointer transform transition-all duration-300
-              hover:scale-105 hover:-translate-y-1 hover:shadow-xl
-              motion-reduce:transition-none
-            "
-          >
-            {reason}
-            <span
-              className="
-                absolute -top-2 -right-2 w-6 h-6 bg-pink-500 text-white rounded-full
-                flex items-center justify-center text-xs opacity-0 group-hover:opacity-100
-                transition-opacity duration-300
-              "
-            >
-              {index + 1}
-            </span>
-          </span>
-        ))}
-      </div>
-    </div>
+          {payload.message && (
+            <p className="glass max-w-xl whitespace-pre-line rounded-3xl px-6 py-4 text-lg leading-relaxed">
+              {payload.message}
+            </p>
+          )}
+          {payload.from && (
+            <p className="text-white/85">{t("love.from", { from: payload.from })}</p>
+          )}
+
+          <Button onClick={handleShare} className="mt-2 px-8 py-3.5 text-base">
+            {canShare ? t("love.share") : t("love.copyLink")}
+          </Button>
+        </motion.div>
+      </section>
+
+      <section className="bg-gradient-to-b from-rose-100 via-blush to-white px-6 py-16">
+        <ul className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {reasons.map((reason, i) => (
+            <ReasonCard key={i} reason={reason} index={i} />
+          ))}
+        </ul>
+
+        <div className="mt-14 text-center">
+          <ButtonLink to="/create" variant="soft">
+            {t("love.makeYours")}
+          </ButtonLink>
+        </div>
+      </section>
+    </>
   );
 }
 

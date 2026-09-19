@@ -1,8 +1,8 @@
-# 📕 LoveList
+# 📕 why?
 
 🌸 **A Beautiful App to  Share Personalized “Reasons Why I Love You”**
 
-LoveList is a romantic single-page application (SPA) built with **Vite**, **React**, **TailwindCSS**, and **Firebase**.  
+why? is a romantic single-page application (SPA) built with **Vite**, **React**, **TailwindCSS**, and **Motion**.  
 It lets users use a custom list of reasons why they love someone and share it via a unique URL.
 
 🔗 **Live Demo:** [https://love-list-mu.vercel.app](https://love-list-mu.vercel.app)
@@ -12,9 +12,10 @@ It lets users use a custom list of reasons why they love someone and share it vi
 ## 💡 Features
 
 - ✨ **Personalized Generation:** Generate a list of ❤️ *50 reasons why I love you*.
-- ✨ **Persistence:** Saves each list to **Firebase Firestore**.
-- ✨ **Shareable Links:** Unique URL for every list (`/love/:slug`).
-- ✨ **Animated UI:** Includes confetti, floating badges, and smooth fade-in effects.
+- ✨ **No backend:** each love page lives entirely inside its shareable link.
+- 🌍 **Multilingual:** Español, English, Português and Français.
+- ✨ **Shareable Links:** every page is encoded in its own URL (`/love/:token`), so nothing needs to be stored on a server.
+- ✨ **Animated UI:** Full-screen hero, confetti and spring animations that respect `prefers-reduced-motion`.
 - ✨ **Social Sharing:** Mobile-friendly share/copy link functionality.
 - ✨ **Interactive Elements:** Animated counters and polished transitions.
 
@@ -27,7 +28,7 @@ It lets users use a custom list of reasons why they love someone and share it vi
 | **Vite** | Build tool & dev server |
 | **React** | Frontend UI library |
 | **TailwindCSS** | Utility-first styling |
-| **Firebase Firestore** | NoSQL Database |
+| **Motion** | Spring animations |
 | **React Router** | Client-side navigation |
 | **Canvas-Confetti** | Visual celebrations |
 | **React-Hot-Toast** | Stylish notifications |
@@ -39,28 +40,12 @@ It lets users use a custom list of reasons why they love someone and share it vi
 
 ```text
 src
-├── app
-│   ├── providers.tsx
-│   └── router.tsx
-├── components
-│   ├── ui
-│   └── love
-├── constants
-│   └── loveReasons.ts
-├── hooks
-│   └── useLovePage.ts
-├── pages
-│   ├── Home
-│   ├── Create
-│   ├── Love
-│   └── NotFound
-├── services
-│   └── firebase
-│       ├── firebaseConfig.ts
-│       └── loveService.ts
-├── utils
-│   ├── generateSlug.ts
-│   └── generateReasons.ts
+├── app            (router, providers)
+├── components     (layout, ui, love)
+├── constants      (reasons per language)
+├── i18n           (translations, language provider)
+├── pages          (Home, Create, Love, Privacy, NotFound)
+├── utils          (reasons generator, link encoding, sharing)
 ├── styles
 │   └── globals.css
 └── main.tsx
@@ -72,9 +57,8 @@ src
 
 Make sure you have installed:
 
-- Node.js (>= 16.x)  
-- npm (>= 8.x)  
-- A Firebase project account
+- Node.js (>= 20.19)  
+- npm (>= 10)  
 
 ---
 
@@ -92,58 +76,19 @@ cd LoveList
 npm install 
 ```
 
-### Configure Environment Variables
-- Create a .env file in the root directory and add your Firebase credentials:
-
-```env
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender
-VITE_FIREBASE_APP_ID=your_app_id
-```
-
 ### Run the development server
 
 ```Bash
 npm run dev
 ```
 
-## 🔧 Firebase Setup
+### Build for production
 
-- Go to the Firebase Console.
-- Create a new project.
-- Enable Firestore Database in test mode (or set production rules).
-- Register a new Web App and copy the configuration.
-- Ensure your .env matches the provided config.
+```bash
+npm run build    # type-checks and outputs to dist/
+npm run preview  # serves the production build locally
+```
 
----
+## 🖼️ Regenerating the hero image
 
-## 🏠 Routes
-
-| Route | Description |
-| :--- | :--- |
-| `/` | **Home Page** |
-| `/create` | Generate reasons & create shareable link |
-| `/love/:slug` | View the personalized love list |
-| `*` | **404 Not Found** |
-
----
-
-## 💬 Contribution
-
-Feel free to submit issues and pull requests.  
-Improvements, bug fixes, and UI polish are always welcome ❤️.
-
----
-
-This project was created to spread love and help express affection in a creative way.
-
----
-
-## 🪄 License
-
-Distributed under the **MIT License**.
-
-
+The background comes from `art/hero.svg`. After editing it, run `node scripts/build-images.mjs` to rebuild `public/hero.jpg` and `public/og.jpg`.
